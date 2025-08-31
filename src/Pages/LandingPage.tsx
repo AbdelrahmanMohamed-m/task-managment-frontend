@@ -1,55 +1,56 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import AnimatedHeader from "../components/LandingPage Compnents/AnimatedHeader";
+import HeroSection from "../components/LandingPage Compnents/HeroSection";
+import StatsSection from "../components/LandingPage Compnents/StatsSection";
+import FeaturesSection from "../components/LandingPage Compnents/FeaturesSection";
+import CTASection from "../components/LandingPage Compnents/CTASection";
+import FooterSection from "../components/LandingPage Compnents/FooterSection";
 
 const LandingPage = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleNavigate = (page: string) => {
+    // Implement navigation logic, e.g. useNavigate() from react-router-dom
+    // Example:
+    // if (page === "login") navigate("/login");
+    // if (page === "signup") navigate("/register");
+  };
+
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col">
-      {/* Navigation */}
-      <nav className="flex justify-between items-center px-8 py-6 shadow-sm">
-        <h1 className="text-2xl font-bold text-indigo-600">TaskFlow</h1>
-        <div className="space-x-4">
-          <Link to="/login" className="text-sm font-medium hover:text-indigo-600">Login</Link>
-          <Link to="/register" className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">
-            Sign Up
-          </Link>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <header className="flex flex-col items-center justify-center text-center px-6 py-20 bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
-        <h2 className="text-5xl font-bold mb-4">Work Smarter, Not Harder</h2>
-        <p className="text-lg max-w-xl mb-6">
-          Manage tasks, collaborate with your team, and hit every deadline—without the chaos.
-        </p>
-        <Link to="/register" className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-          Get Started Free
-        </Link>
-      </header>
-
-      {/* Features Section */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-          <div>
-            <div className="text-4xl mb-2">📌</div>
-            <h3 className="text-lg font-bold mb-2">Smart Task Management</h3>
-            <p>Organize your work with lists, priorities, and deadlines.</p>
-          </div>
-          <div>
-            <div className="text-4xl mb-2">👥</div>
-            <h3 className="text-lg font-bold mb-2">Team Collaboration</h3>
-            <p>Assign tasks, share updates, and stay aligned in real time.</p>
-          </div>
-          <div>
-            <div className="text-4xl mb-2">📈</div>
-            <h3 className="text-lg font-bold mb-2">Progress Tracking</h3>
-            <p>Visualize your goals and monitor progress with ease.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="text-center py-6 text-sm text-gray-500">
-        &copy; {new Date().getFullYear()} TaskFlow. Built for productivity.
-      </footer>
+    <div className="min-h-screen overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div
+          className="absolute w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
+          style={{ top: "10%", left: "10%", transform: `translate(${mousePosition.x / 50}px, ${mousePosition.y / 50}px)` }}
+        />
+        <div
+          className="absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
+          style={{ bottom: "10%", right: "10%", transform: `translate(${-mousePosition.x / 80}px, ${-mousePosition.y / 80}px)` }}
+        />
+      </div>
+      <AnimatedHeader onNavigate={handleNavigate} scrollY={scrollY} mousePosition={mousePosition} />
+      <HeroSection onNavigate={handleNavigate} />
+      <StatsSection />
+      <FeaturesSection />
+      <CTASection onNavigate={handleNavigate} />
+      <FooterSection />
     </div>
   );
 };
