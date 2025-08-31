@@ -22,7 +22,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public routes */}
-            <Route path="/" element={<LandingPage/>} />
+            <Route path="/LandingPage" element={<LandingPage/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
@@ -39,7 +39,7 @@ function App() {
             />
 
             {/* Default redirect */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<Navigate to="/LandingPage" replace />} />
           </Routes>
         </div>
       </Router>

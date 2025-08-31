@@ -21,7 +21,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   // If no user, redirect to login
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/LandingPage" replace />;
   }
 
   // If user exists, show the protected content
