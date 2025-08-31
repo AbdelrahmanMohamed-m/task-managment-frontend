@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = async (credentials: LoginDto) => {
     try {
       const response = await axios.post<User>(
-        "http://localhost:5248/api/user/login",
+        'http://localhost:5248/api/user/login',
         credentials
       );
       const userData = response.data;
@@ -55,9 +55,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(userData);
       localStorage.setItem("token", userData.token);
       localStorage.setItem("user", JSON.stringify(userData));
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${userData.token}`;
+      axios.defaults.headers.common["Authorization"] =`Bearer ${userData.token}`;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const backendError = error.response?.data;

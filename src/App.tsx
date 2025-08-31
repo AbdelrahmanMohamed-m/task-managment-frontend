@@ -12,6 +12,7 @@ import Layout from "./components/layout/layout";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Register from "./components/auth/register";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import LandingPage from "./Pages/LandingPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public routes */}
+            <Route path="/" element={<LandingPage/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 

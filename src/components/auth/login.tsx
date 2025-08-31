@@ -49,15 +49,21 @@ const Login = () => {
         {/* Right Panel (Form) */}
         <div className="w-1/2 p-10">
           <h2 className="mb-6 text-2xl font-bold text-gray-800">Sign In</h2>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <input
+              name="username"
               type="text"
-              placeholder="Username or email"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
               className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:ring-2 focus:ring-purple-400"
             />
             <input
+              name="password"
               type="password"
               placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
               className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:ring-2 focus:ring-purple-400"
             />
 
@@ -73,10 +79,14 @@ const Login = () => {
 
             <button
               type="submit"
-              onClick={handleSubmit}
-              className="mt-2 w-full rounded-lg bg-purple-600 py-2 text-white hover:bg-purple-700"
+              disabled={isLoading}
+              className={`mt-2 w-full rounded-lg py-2 text-white ${
+                isLoading
+                  ? "bg-purple-400 cursor-not-allowed"
+                  : "bg-purple-600 hover:bg-purple-700"
+              }`}
             >
-              Sign In
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
@@ -93,5 +103,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
