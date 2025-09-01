@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Zap, ArrowRight } from "lucide-react";
 import { Button } from "./button";
+import { NAV_TARGET } from "../../Utilites/Contants";
 
 const AnimatedHeader = ({ onNavigate, scrollY, mousePosition }: { onNavigate: (page: string) => void, scrollY: number, mousePosition: { x: number, y: number } }) => {
   const headerOpacity = Math.min(scrollY / 100, 0.95);
@@ -54,21 +55,21 @@ const AnimatedHeader = ({ onNavigate, scrollY, mousePosition }: { onNavigate: (p
           className="hidden md:flex items-center space-x-8"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
         >
           {[
             { name: 'Features', href: '#features' },
             { name: 'Pricing', href: '#pricing' },
             { name: 'About', href: '#about' },
             { name: 'Contact', href: '#contact' }
-          ].map((item, index) => (
+          ].map((item) => (
             <motion.a
               key={item.name}
               href={item.href}
               className="text-white/90 hover:text-white transition-all duration-300 relative group py-2 px-1"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 + (index * 0.05) }}
+              transition={{ duration: 0.1, delay: 0.1  }}
               whileHover={{ scale: 1.05 }}
             >
               {item.name}
@@ -90,13 +91,13 @@ const AnimatedHeader = ({ onNavigate, scrollY, mousePosition }: { onNavigate: (p
           <Button
             variant="ghost"
             className="text-white hover:bg-white/10 transition-all duration-300 px-6 py-2 rounded-full border border-white/20 backdrop-blur-sm"
-            onClick={() => onNavigate('login')}
+            onClick={() => onNavigate(NAV_TARGET.LOGIN)}
           >
             Login
           </Button>
           <Button
             className="bg-gradient-to-r from-white to-white/95 text-purple-600 hover:from-white/95 hover:to-white/90 transition-all duration-300 px-6 py-2 rounded-full shadow-lg font-medium"
-            onClick={() => onNavigate('signup')}
+            onClick={() => onNavigate(NAV_TARGET.SIGNUP)}
           >
             <span>Get Started Free</span>
             <span className="ml-2"><ArrowRight className="w-4 h-4" /></span>

@@ -5,10 +5,14 @@ import StatsSection from "../components/LandingPage Compnents/StatsSection";
 import FeaturesSection from "../components/LandingPage Compnents/FeaturesSection";
 import CTASection from "../components/LandingPage Compnents/CTASection";
 import FooterSection from "../components/LandingPage Compnents/FooterSection";
+import { useNavigate } from "react-router-dom";
+import { NAV_TARGET } from "../Utilites/Contants";
+import { ROUTES } from "../Utilites/Routes";
 
 const LandingPage = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollY, setScrollY] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -26,10 +30,9 @@ const LandingPage = () => {
   }, []);
 
   const handleNavigate = (page: string) => {
-    // Implement navigation logic, e.g. useNavigate() from react-router-dom
-    // Example:
-    // if (page === "login") navigate("/login");
-    // if (page === "signup") navigate("/register");
+   
+     if (page === NAV_TARGET.LOGIN) navigate(ROUTES.LOGIN);
+     if (page === NAV_TARGET.SIGNUP) navigate(ROUTES.REGISTER);
   };
 
   return (
