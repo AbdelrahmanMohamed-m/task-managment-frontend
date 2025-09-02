@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./button";
+import { NAV_TARGET } from "../../Utilites/Contants";
 
 const CTASection = ({ onNavigate }: { onNavigate: (page: string) => void }) => (
   <motion.section
@@ -53,7 +54,7 @@ const CTASection = ({ onNavigate }: { onNavigate: (page: string) => void }) => (
         <Button
           size="lg"
           className="bg-white text-purple-600 hover:bg-white/90 text-lg px-8 py-4 h-auto transition-all duration-300"
-          onClick={() => onNavigate('signup')}
+          onClick={() => onNavigate(NAV_TARGET.SIGNUP)}
         >
           Start Your Free Trial
           <motion.div

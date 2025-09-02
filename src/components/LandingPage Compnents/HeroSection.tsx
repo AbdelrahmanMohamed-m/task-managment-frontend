@@ -3,6 +3,7 @@ import { ArrowRight, Play, Star, Shield } from "lucide-react";
 import { Button } from "./button";
 import AnimatedCounter from "./AnimatedCounter";
 import FloatingElement from "./FlaotingElement";
+import { NAV_TARGET } from "../../Utilites/Contants";
 
 const HeroSection = ({ onNavigate }: { onNavigate: (page: string) => void }) => (
   <section className="relative px-4 pt-32 pb-20 bg-gradient-to-br from-purple-600 via-purple-700 to-blue-600">
@@ -64,7 +65,7 @@ const HeroSection = ({ onNavigate }: { onNavigate: (page: string) => void }) => 
         <Button
           size="lg"
           className="bg-white text-purple-600 hover:bg-white/90 text-lg px-8 py-4 h-auto transition-all duration-300"
-          onClick={() => onNavigate('signup')}
+          onClick={() => onNavigate(NAV_TARGET.SIGNUP)}
         >
           Get Started Free
           <motion.div

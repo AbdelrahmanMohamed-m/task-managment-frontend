@@ -32,7 +32,7 @@ const LandingPage = () => {
   const handleNavigate = (page: string) => {
    
      if (page === NAV_TARGET.LOGIN) navigate(ROUTES.LOGIN);
-     if (page === NAV_TARGET.SIGNUP) navigate(ROUTES.REGISTER);
+     if (page === NAV_TARGET.SIGNUP) navigate(ROUTES.REGISTER); 
   };
 
   return (
