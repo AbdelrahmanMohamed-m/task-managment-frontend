@@ -1,6 +1,7 @@
+
 export const ROUTES = {
   LOGIN: "/login",
-  REGISTER: "/register",
+  SignUp: "/signup",
   LANDING: "/LandingPage",
   DASHBOARD: "/dashboard",
   // Add more as needed
