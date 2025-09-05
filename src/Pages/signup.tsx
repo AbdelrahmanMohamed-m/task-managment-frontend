@@ -1,38 +1,49 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Context/AuthContext";
-import { Button } from "../LandingPage Compnents/button";
 import { ArrowLeft, Eye, EyeOff, Zap } from "lucide-react";
-import { ROUTES } from "../../Utilites/Routes";
+import { useAuth } from "../Context/AuthContext";
+import { ROUTES } from "../Utilites/Routes";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../LandingPage Compnents/Card";
-import { Checkbox } from "../UniversalCompnents/Checkbox";
-import { Label } from "../UniversalCompnents/Label";
-import { Input } from "../UniversalCompnents/Input";
+} from "../components/LandingPage Compnents/Card";
+import { Input } from "../components/UniversalCompnents/Input";
+import { Label } from "../components/UniversalCompnents/Label";
+import { Button } from "../components/LandingPage Compnents/button";
 
-const Login = () => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
+    email: "",
     password: "",
+    confirmPassword: "",
   });
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      await login(formData);
-      navigate(ROUTES.DASHBOARD);
+      await register({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      });
+      navigate("/dashboard");
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -42,7 +53,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-blue-600 relative">
-      {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <div
           className="absolute inset-0"
@@ -54,7 +64,6 @@ const Login = () => {
         ></div>
       </div>
 
-      {/* Header */}
       <header className="relative z-10 px-4 py-6">
         <div className="max-w-7xl mx-auto flex items-center">
           <Button
@@ -75,22 +84,19 @@ const Login = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column: Welcome + Features */}
           <div className="space-y-12 text-center lg:text-left text-white">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Welcome Back
+                Create Your Account
               </h1>
               <p className="text-xl text-purple-100 mb-8 leading-relaxed">
-                You can sign in to access your existing account and continue
-                your productivity journey.
+                Sign up to start organizing your tasks and collaborating with
+                your team.
               </p>
             </div>
 
-            {/* Features List */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 bg-yellow-300 rounded-full"></div>
@@ -107,15 +113,14 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Right Column: Login Card */}
-          <div className="w-full max-w-md mx-auto lg:mx-0 ">
-            <Card className="border-0 shadow-2xl rounded-2xl bg-white ">
+          <div className="w-full max-w-md mx-auto lg:mx-0">
+            <Card className="border-0 shadow-2xl rounded-2xl bg-white">
               <CardHeader className="space-y-1 pb-6">
                 <CardTitle className="text-2xl font-bold text-center">
-                  Sign In
+                  Sign Up
                 </CardTitle>
                 <CardDescription className="text-center text-black/40">
-                  Enter your credentials to access your account
+                  Fill in your details to create a new account
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -125,10 +130,25 @@ const Login = () => {
                     <Input
                       id="username"
                       type="text"
-                      placeholder="Enter your username"
+                      placeholder="Choose a username"
                       value={formData.username}
                       onChange={(e) =>
                         setFormData({ ...formData, username: e.target.value })
+                      }
+                      required
+                      className="h-11"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
                       }
                       required
                       className="h-11"
@@ -141,7 +161,7 @@ const Login = () => {
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="Enter your password"
+                        placeholder="Create a password"
                         value={formData.password}
                         onChange={(e) =>
                           setFormData({ ...formData, password: e.target.value })
@@ -165,41 +185,47 @@ const Login = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="remember" />
-                      <Label htmlFor="remember" className="text-sm">
-                        Remember me
-                      </Label>
-                    </div>
-
-                    <Button
-                      variant="link"
-                      className="px-0 text-sm text-purple-600 hover:text-purple-700"
-                    >
-                      Forgot password?
-                    </Button>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      placeholder="Confirm your password"
+                      value={formData.confirmPassword}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          confirmPassword: e.target.value,
+                        })
+                      }
+                      required
+                      className="h-11"
+                    />
                   </div>
+
+                  {error && (
+                    <p className="text-red-500 text-sm text-center">{error}</p>
+                  )}
 
                   <Button
                     type="submit"
                     className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Please wait..." : "Sign In"}
+                    {isLoading ? "Creating account..." : "Sign Up"}
                   </Button>
 
                   <div className="text-center text-sm">
                     <span className="text-gray-600">
-                      Don't have an account?
+                      Already have an account?
                     </span>{" "}
                     <Button
                       type="button"
                       variant="link"
-                      
                       className="px-0 text-purple-600 hover:text-purple-700"
+                      onClick={() => navigate(ROUTES.LOGIN)}
                     >
-                      Create an Account
+                      Sign In
                     </Button>
                   </div>
                 </form>
@@ -212,4 +238,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

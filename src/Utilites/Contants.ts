@@ -6,3 +6,4 @@ export const NAV_TARGET = {
 } as const;
 
 export type NavTarget = typeof NAV_TARGET[keyof typeof NAV_TARGET];
+

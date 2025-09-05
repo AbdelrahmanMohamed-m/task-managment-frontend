@@ -1,32 +1,50 @@
 import { useState, useEffect } from "react";
-import { Project } from "../../Types/api";
-import CreateProjectModal from "./CreateProjectModal";
-import DashboardHeader from "./DashBoardHeader";
-import DashBoardStats from "./DashboardStats";
-import { useProjects } from "../../Hooks/projectsHook";
-import DashBoardProjectsSection from "./DashBoardProjectsSection";
-import DashboardDetailModal from "./DashboardDetailModal";
+import { useUserTasks } from "../Hooks/UserTasksHook";
+import { Project } from "../Types/api";
+import { useAuth } from "../Context/AuthContext";
+import DashboardHeader from "../components/Dashboard/DashBoardHeader";
+import DashBoardStats from "../components/Dashboard/DashboardStats";
+import DashBoardProjectsSection from "../components/Dashboard/DashBoardProjectsSection";
+import { useProjects } from "../Hooks/projectsHook";
 
 const Dashboard = () => {
   // Data
-  const { projects, isLoading, error, fetchProjects , deleteProject} = useProjects();
+  const { projects, isLoading, error, fetchProjects, deleteProject } =
+    useProjects();
 
+  // filter for the tasks
+  const {
+    tasks,
+    isLoading: tasksLoading,
+    error: tasksError,
+    fetchTasks,
+  } = useUserTasks();
+
+  const completedCount = tasks.filter(
+    (task) => task.status === "completed"
+  ).length;
+  //tasks this month
+  const currentMonth = new Date().getMonth();
+  const tasksThisMonth = tasks.filter((task) => {
+    const taskDate = new Date(task.createdAt);
+    return taskDate.getMonth() === currentMonth;
+  }).length;
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
   // handlers
   const openCreate = () => setIsCreateOpen(true);
   const closeCreate = () => setIsCreateOpen(false);
-
   const handleProjectClick = (ProjectData: Project) => {
     setSelectedProject(ProjectData);
     setIsDetailsOpen(true);
   };
-const closeDetails = () => {
-  setIsDetailsOpen(false);
-  setSelectedProject(null); // optional cleanup
-};
+  const { user, logout } = useAuth();
+  // log out function
+  const closeDetails = () => {
+    setIsDetailsOpen(false);
+    setSelectedProject(null);
+  };
 
   useEffect(() => {
     fetchProjects();
@@ -61,33 +79,32 @@ const closeDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <DashboardHeader totalProjects={projects.length}></DashboardHeader>
+    <div className=" min-h-screen bg-gray-50">
+      <DashboardHeader
+        username={user?.userName}
+        Logout={logout}
+      ></DashboardHeader>
       {/* Main Content */}
-
-      <div>
-        {/* Create Project button  */}
-        <CreateProjectModal
-          isOpen={isCreateOpen}
-          onClose={closeCreate}
-          onProjectCreated={fetchProjects}
-        />
-
-        {/* stats area  */}
-        <DashBoardStats projects={projects}></DashBoardStats>
-
-        {/* Projects Section */}
-        <DashBoardProjectsSection
+      <main className="p-6">
+        <DashBoardStats
+          projects={projects.length}
+          tasksThismonth={tasksThisMonth}
+          totalTasks={tasks.length}
+          taskscompleted={completedCount}
+        ></DashBoardStats>
+      </main>
+      {/* Projects Section */}
+      <DashBoardProjectsSection
           projects={projects}
           onNewProjectClick={openCreate}
           onProjectClick={handleProjectClick}
         />
 
-        {/* Enhanced Modal */}
-        {isDetailsOpen && selectedProject && (
+      {/* Enhanced Modal */}
+      {/* {isDetailsOpen && selectedProject && (
           <DashboardDetailModal selectedProject={selectedProject} closeDetails={closeDetails} DeleteProject={deleteProject}></DashboardDetailModal>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

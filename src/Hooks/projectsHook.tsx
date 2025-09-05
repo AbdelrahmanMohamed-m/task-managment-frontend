@@ -21,6 +21,8 @@ export function useProjects(autoFetch: boolean = true) {
     }
   };
 
+  
+
   const deleteProject = async (id: number) => {
     try {
       setIsLoading(true);

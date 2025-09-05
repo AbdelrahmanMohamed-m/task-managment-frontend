@@ -34,7 +34,8 @@ export interface CreateProjectDto {
   startDate: string;
   endDate: string;
 }
-
+// make it into an enum 
+export type TaskStatus = "pending" | "in-progress" | "completed";
 // Task types
 export interface Task {
   id: number;
@@ -42,7 +43,9 @@ export interface Task {
   description: string;
   dueDate: string;
   priority: string;
-  status: string;
+
+  // make it into an enum 
+  status: TaskStatus;
   createdAt: string;
   updatedAt: string;
   projectId: number;

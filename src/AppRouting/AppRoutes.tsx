@@ -1,10 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "../Pages/LandingPage";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
-import { Layout } from "lucide-react";
-import Dashboard from "../components/Dashboard/Dashboard";
-import Login from "../components/auth/login";
-import SignUp from "../components/auth/signup";
+import Login from "../Pages/login";
+import SignUp from "../Pages/signup";
+import Dashboard from "../Pages/Dashboard";
 
 const AppRoutes = () => (
   <Routes>
@@ -18,9 +17,7 @@ const AppRoutes = () => (
       path="/dashboard"
       element={
         <ProtectedRoute>
-          <Layout>
-            <Dashboard />
-          </Layout>
+          <Dashboard />
         </ProtectedRoute>
       }
     />

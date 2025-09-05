@@ -1,51 +1,44 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Context/AuthContext";
-import { Button } from "../LandingPage Compnents/button";
-import { ArrowLeft, Eye, EyeOff, Zap } from "lucide-react";
-import { ROUTES } from "../../Utilites/Routes";
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../LandingPage Compnents/Card";
-import { Label } from "../UniversalCompnents/Label";
-import { Input } from "../UniversalCompnents/Input";
+} from "../components/LandingPage Compnents/Card";
+import { Checkbox } from "../components/UniversalCompnents/Checkbox";
+import { Label } from "../components/UniversalCompnents/Label";
+import { Input } from "../components/UniversalCompnents/Input";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
+import { ROUTES } from "../Utilites/Routes";
+import { Button } from "../components/LandingPage Compnents/button";
+import { ArrowLeft, Eye, EyeOff, Zap } from "lucide-react";
 
-const SignUp = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
-    email: "",
     password: "",
-    confirmPassword: "",
   });
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { register } = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     setIsLoading(true);
+    
+    setError("");
     try {
-      await register({
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      });
-      navigate("/dashboard");
+      await login(formData);
+      navigate(ROUTES.DASHBOARD);
     } catch (err: any) {
+          // want to add the error coming out of the back end 
       setError(err.message);
+      console.error("Login error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -53,6 +46,7 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-purple-700 to-blue-600 relative">
+      {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <div
           className="absolute inset-0"
@@ -64,6 +58,7 @@ const SignUp = () => {
         ></div>
       </div>
 
+      {/* Header */}
       <header className="relative z-10 px-4 py-6">
         <div className="max-w-7xl mx-auto flex items-center">
           <Button
@@ -84,18 +79,22 @@ const SignUp = () => {
         </div>
       </header>
 
+      {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column: Welcome + Features */}
           <div className="space-y-12 text-center lg:text-left text-white">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Create Your Account
+                Welcome Back
               </h1>
               <p className="text-xl text-purple-100 mb-8 leading-relaxed">
-                Sign up to start organizing your tasks and collaborating with your team.
+                You can sign in to access your existing account and continue
+                your productivity journey.
               </p>
             </div>
 
+            {/* Features List */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 bg-yellow-300 rounded-full"></div>
@@ -112,14 +111,15 @@ const SignUp = () => {
             </div>
           </div>
 
-          <div className="w-full max-w-md mx-auto lg:mx-0">
-            <Card className="border-0 shadow-2xl rounded-2xl bg-white">
+          {/* Right Column: Login Card */}
+          <div className="w-full max-w-md mx-auto lg:mx-0 ">
+            <Card className="border-0 shadow-2xl rounded-2xl bg-white ">
               <CardHeader className="space-y-1 pb-6">
                 <CardTitle className="text-2xl font-bold text-center">
-                  Sign Up
+                  Sign In
                 </CardTitle>
                 <CardDescription className="text-center text-black/40">
-                  Fill in your details to create a new account
+                  Enter your credentials to access your account
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -129,25 +129,10 @@ const SignUp = () => {
                     <Input
                       id="username"
                       type="text"
-                      placeholder="Choose a username"
+                      placeholder="Enter your username"
                       value={formData.username}
                       onChange={(e) =>
                         setFormData({ ...formData, username: e.target.value })
-                      }
-                      required
-                      className="h-11"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email"
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
                       }
                       required
                       className="h-11"
@@ -160,7 +145,7 @@ const SignUp = () => {
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="Create a password"
+                        placeholder="Enter your password"
                         value={formData.password}
                         onChange={(e) =>
                           setFormData({ ...formData, password: e.target.value })
@@ -176,53 +161,52 @@ const SignUp = () => {
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-gray-400" />
-                        ) : (
                           <Eye className="h-4 w-4 text-gray-400" />
+                        ) : (
+                          <EyeOff className="h-4 w-4 text-gray-400" />
                         )}
                       </Button>
                     </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      placeholder="Confirm your password"
-                      value={formData.confirmPassword}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                      required
-                      className="h-11"
-                    />
-                  </div>
-
                   {error && (
-                    <p className="text-red-500 text-sm text-center">{error}</p>
+                    <div className="text-red-600 text-sm  text-left">{error}</div>
                   )}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                        
+                      <Checkbox id="remember" />
+                      <Label htmlFor="remember" className="text-sm">
+                        Remember me
+                      </Label>
+                    </div>
+
+                    <Button
+                      variant="link"
+                      className="px-0 text-sm text-purple-600 hover:text-purple-700"
+                    >
+                      Forgot password?
+                    </Button>
+                  </div>
 
                   <Button
                     type="submit"
                     className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Creating account..." : "Sign Up"}
+                    {isLoading ? "Please wait..." : "Sign In"}
                   </Button>
 
                   <div className="text-center text-sm">
-                    <span className="text-gray-600">Already have an account?</span>{" "}
+                    <span className="text-gray-600">
+                      Don't have an account?
+                    </span>{" "}
                     <Button
                       type="button"
                       variant="link"
+                      onClick={() => navigate(ROUTES.SignUp)}
                       className="px-0 text-purple-600 hover:text-purple-700"
-                      onClick={() => navigate(ROUTES.LOGIN)}
                     >
-                      Sign In
+                      Create an Account
                     </Button>
                   </div>
                 </form>
@@ -235,4 +219,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
